@@ -1,11 +1,14 @@
 package com.hardcore.accounting.manager;
 
 import com.hardcore.accounting.converter.p2c.UserInfoP2CConverter;
+import com.hardcore.accounting.exception.ResourceNotFoundException;
 import com.hardcore.accounting.model.common.UserInfo;
 import com.hardcore.accounting.dao.UserInfoDAO;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 @Component
 // 调用刚建好的接口
@@ -20,10 +23,14 @@ public class UserInfoManagerImpl implements UserInfoManager{
         this.userInfoDAO=userInfoDAO;
         this.userInfoP2CConverter=userInfoP2CConverter;
     }
+    // DAO是p层的数据,所以经过处理后的userInfo也是P层的.然后用P2CConverter将数据转化为C层的
     @Override
-    // 因为是manager层,所以调用的是common中的UserInfo实现
     public UserInfo getUserInfoByUserId(Long userId){
-        val userInfo=userInfoDAO.getUserInfoById(userId);  // val作用: 自动进行类型推断
+        // val作用: 自动进行类型推断
+        // Optional.ofNullable(): 允许传入id内容为空
+        // .orElseThrow(): 如果传入id为空,那么丢出一个异常,调用NotFound的异常处理
+        val userInfo = Optional.ofNullable(userInfoDAO.getUserInfoById(userId))
+                .orElseThrow(()->new ResourceNotFoundException(String.format("user %s is not found",userId)));
         return userInfoP2CConverter.convert(userInfo);
     }
 }
