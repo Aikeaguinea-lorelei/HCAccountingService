@@ -26,6 +26,7 @@ public class UserInfoC2SConverter extends Converter<UserInfo,com.hardcore.accoun
         return UserInfo.builder()
                 .id(userInfo.getId())
                 .username(userInfo.getUsername())
+                .password(userInfo.getPassword())
                 .build();
     }
 }

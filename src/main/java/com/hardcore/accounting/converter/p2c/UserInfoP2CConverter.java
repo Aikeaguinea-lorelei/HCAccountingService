@@ -21,7 +21,7 @@ public class UserInfoP2CConverter extends Converter<UserInfo,com.hardcore.accoun
     protected UserInfo doBackward(com.hardcore.accounting.model.common.UserInfo userInfo) {
         return UserInfo.builder()
                 .id(userInfo.getId())
-                .Username(userInfo.getUsername())
+                .username(userInfo.getUsername())
                 .password(userInfo.getPassword())
                 .build();
     }

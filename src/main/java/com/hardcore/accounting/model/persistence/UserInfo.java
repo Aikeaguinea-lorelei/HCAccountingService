@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class UserInfo {
     private Long id;
-    private String Username;
+    private String username;
     private String password;
     private LocalDate createTime;
     private LocalDate updateTime;

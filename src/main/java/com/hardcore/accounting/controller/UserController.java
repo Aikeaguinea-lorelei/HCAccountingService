@@ -17,7 +17,7 @@ import javax.validation.constraints.NotNull;
 
 
 @RestController
-@RequestMapping("v1/users")
+@RequestMapping("v1.0/users")
 @Slf4j  // 作用: 操作在idea中的控制台中打印的日志信息(log)
 
 public class UserController {
