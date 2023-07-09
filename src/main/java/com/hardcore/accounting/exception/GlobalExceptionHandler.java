@@ -1,6 +1,7 @@
 package com.hardcore.accounting.exception;
 
 import lombok.val;
+import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -24,5 +25,16 @@ public class GlobalExceptionHandler {
         // code如果不为空就get,为空就返回500(服务器错误)
         return ResponseEntity.status(ex.getStatusCode() != 0 ? ex.getStatusCode() : HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .body(errorResponse);
+    }
+    // 此程序是当密码输入错误时,返回的response信息
+    @ExceptionHandler(IncorrectCredentialsException.class)
+    ResponseEntity<?> handleIncorrectCredentialsException(IncorrectCredentialsException ex){
+        val errorResponse=ErrorResponse.builder()
+                .statusCode(400)
+                .message(ex.getMessage())
+                .errorCode("INCORRECT_CREDENTIALS")
+                .errorType(ServiceException.ErrorType.Client)
+                .build();
+        return ResponseEntity.status(400).body(errorResponse);
     }
 }

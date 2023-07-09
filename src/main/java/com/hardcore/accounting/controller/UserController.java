@@ -8,14 +8,15 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
 
-
+/**
+ * UserController作用:
+ * 用户在url输入一个userId以后,通过manager（P2C）层读取用户信息,然后把数据通过C2S转化为S层
+ * 如果输入id为空的话就抛出异常.
+ * **/
 @RestController
 @RequestMapping("v1.0/users")
 @Slf4j  // 作用: 操作在idea中的控制台中打印的日志信息(log)
@@ -30,7 +31,7 @@ public class UserController {
         this.userInfoC2SConverter = userInfoC2SConverter;
     }
 
-    // (最外层)  URL中输入user的id之后,通过manager（P2C）层读取用户信息,然后把数据通过C2S转化为S层
+    // (最外层)  URL中输入user的id之后,通过manager（P2C）层读取用户信息,然后把数据通过C2S转化为S层,再通过验证
     @GetMapping(path = "/{id}", produces = "application/json", consumes = "application/json")
     public ResponseEntity<UserInfo> getUserInfoByUserId(@PathVariable("id") @NotNull Long userId) {
         log.debug("Get user info by user id {}", userId);
@@ -42,6 +43,15 @@ public class UserController {
         // ResponseEntity的内容在GlobalExceptionHandler包里被实现
         val userInfo = userInfoManager.getUserInfoByUserId(userId);  // 此处userInfo是C层的数据
         val userInfoToReturn = userInfoC2SConverter.convert(userInfo);  // userInfoToReturn: 通过C2S转成S层数据
+        assert userInfoToReturn != null;
+        return ResponseEntity.ok(userInfoToReturn);
+    }
+
+    // 登录系统register: 用户输入用户名密码信息,转换为s层后,通过验证.
+    @PostMapping(produces = "application/json", consumes = "application/json")
+    public ResponseEntity<UserInfo> register(@RequestBody UserInfo userInfo) {
+        val userInfoToReturn = userInfoC2SConverter.convert(
+                userInfoManager.register(userInfo.getUsername(), userInfo.getPassword()));
         assert userInfoToReturn != null;
         return ResponseEntity.ok(userInfoToReturn);
     }
