@@ -5,9 +5,8 @@ import com.hardcore.accounting.dao.UserInfoDAO;
 import com.hardcore.accounting.exception.ResourceNotFoundException;
 import com.hardcore.accounting.model.persistence.UserInfo;
 import lombok.val;
-import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
-import org.mockito.ArgumentMatchers;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -15,7 +14,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
@@ -34,7 +32,7 @@ public class UserInfoManagerTest {
         userInfoManager = new UserInfoManagerImpl(userInfoDAO, new UserInfoP2CConverter());
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     public void testGetUserInfoByUserId() {
         // Arrange
         val userId = 1L;
