@@ -1,5 +1,6 @@
 package com.hardcore.accounting.config;
 
+import com.hardcore.accounting.shiro.CustomShiroFilterFactoryBean;
 import lombok.val;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
@@ -50,7 +51,8 @@ public class ShiroConfig {
     @Bean
     public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
 
-        val shiroFilterFactoryBean = new ShiroFilterFactoryBean();
+        // CustomShiroFilterFactoryBean(): 经过修改后的ShiroFilterFactoryBean()
+        val shiroFilterFactoryBean = new CustomShiroFilterFactoryBean();
 
         // 定义一些url规则和对应的访问条件(进行筛选功能的主体)
         val shiroFilterDefinitionMap = new LinkedHashMap<String, String>();
